@@ -1,15 +1,18 @@
 use chrono::NaiveDateTime;
 use serde::{de::Error, Deserialize, Deserializer};
+use serde_with::{serde_as, NoneAsEmptyString};
 
 const SUFFIX: &str = " e.";
 
 pub type Listings = Vec<Listing>;
 
+#[serde_as]
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Listing {
-    description: String,
+    #[serde_as(as = "NoneAsEmptyString")]
+    description: Option<String>,
     live: bool,
-    #[serde(deserialize_with = "de_datetime", rename = "startTime")]
+    #[serde(deserialize_with = "deserialize_datetime", rename = "startTime")]
     start_time: NaiveDateTime,
     title: String,
 }
@@ -20,11 +23,13 @@ impl Listing {
     }
 
     pub fn description(&self) -> &str {
-        self.description.trim().trim_end_matches(SUFFIX)
+        self.description
+            .as_ref()
+            .map_or("", |s| s.trim().trim_end_matches(SUFFIX))
     }
 
     pub fn has_description(&self) -> bool {
-        !self.description.trim().is_empty()
+        self.description.is_some()
     }
 
     pub fn is_live(&self) -> bool {
@@ -32,7 +37,9 @@ impl Listing {
     }
 
     pub fn is_repeat(&self) -> bool {
-        self.description.trim().ends_with(SUFFIX)
+        self.description
+            .as_ref()
+            .map_or(false, |s| s.trim().ends_with(SUFFIX))
     }
 
     pub fn time(&self) -> String {
@@ -49,13 +56,13 @@ struct APIResponse {
     results: Listings,
 }
 
-pub async fn fetch_schedule() -> Result<Listings, Box<dyn std::error::Error>> {
+pub async fn fetch_listings() -> Result<Listings, Box<dyn std::error::Error>> {
     let url = "https://apis.is/tv/ruv";
     let res: APIResponse = reqwest::get(url).await?.json().await?;
     Ok(res.results)
 }
 
-fn de_datetime<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
+fn deserialize_datetime<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
 where
     D: Deserializer<'de>,
 {

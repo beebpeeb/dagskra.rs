@@ -2,7 +2,7 @@ use askama::Template;
 use axum::{routing::get, Router, Server};
 use std::net::SocketAddr;
 
-use dagskra::{fetch_schedule, Listings};
+use dagskra::{fetch_listings, Listings};
 
 #[tokio::main]
 async fn main() {
@@ -23,8 +23,8 @@ struct IndexTemplate<'a> {
 }
 
 async fn index() -> IndexTemplate<'static> {
-    let listings = fetch_schedule().await.unwrap_or_default();
-    let date = listings.first().map_or_else(|| "".to_owned(), |l| l.date());
+    let listings = fetch_listings().await.unwrap_or_default();
+    let date = listings.first().map_or("".to_owned(), |l| l.date());
     IndexTemplate {
         date,
         listings,
