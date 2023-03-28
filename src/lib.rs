@@ -1,16 +1,13 @@
 use chrono::NaiveDateTime;
 use serde::{de::Error, Deserialize, Deserializer};
-use serde_with::{serde_as, NoneAsEmptyString};
 
 const SUFFIX: &str = " e.";
 
 pub type Listings = Vec<Listing>;
 
-#[serde_as]
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Listing {
-    #[serde_as(as = "NoneAsEmptyString")]
-    description: Option<String>,
+    description: String,
     live: bool,
     #[serde(deserialize_with = "deserialize_datetime", rename = "startTime")]
     start_time: NaiveDateTime,
@@ -23,13 +20,11 @@ impl Listing {
     }
 
     pub fn description(&self) -> &str {
-        self.description
-            .as_ref()
-            .map_or("", |s| s.trim().trim_end_matches(SUFFIX))
+        self.description.trim().trim_end_matches(SUFFIX)
     }
 
     pub fn has_description(&self) -> bool {
-        self.description.is_some()
+        !self.description.trim().is_empty()
     }
 
     pub fn is_live(&self) -> bool {
@@ -37,9 +32,7 @@ impl Listing {
     }
 
     pub fn is_repeat(&self) -> bool {
-        self.description
-            .as_ref()
-            .map_or(false, |s| s.trim().ends_with(SUFFIX))
+        self.description.trim().ends_with(SUFFIX)
     }
 
     pub fn time(&self) -> String {
@@ -52,13 +45,13 @@ impl Listing {
 }
 
 #[derive(Deserialize)]
-struct APIResponse {
+struct Response {
     results: Listings,
 }
 
 pub async fn fetch_listings() -> Result<Listings, Box<dyn std::error::Error>> {
     let url = "https://apis.is/tv/ruv";
-    let res: APIResponse = reqwest::get(url).await?.json().await?;
+    let res: Response = reqwest::get(url).await?.json().await?;
     Ok(res.results)
 }
 
@@ -66,8 +59,8 @@ fn deserialize_datetime<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Err
 where
     D: Deserializer<'de>,
 {
-    let s: String = Deserialize::deserialize(deserializer)?;
     let fmt = "%Y-%m-%d %H:%M:%S";
-    let dt = NaiveDateTime::parse_from_str(&s, fmt).map_err(D::Error::custom)?;
+    let s: String = Deserialize::deserialize(deserializer)?;
+    let dt = NaiveDateTime::parse_from_str(&s, fmt).map_err(Error::custom)?;
     Ok(dt)
 }

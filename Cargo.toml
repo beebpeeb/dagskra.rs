@@ -1,16 +1,16 @@
 [package]
-description = "What's on Icelandic TV today"
+description = "Sjónvarpsdagskrá RÚV"
 edition = "2021"
 name = "dagskra"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
-askama = {version = "0.11", default-features = false, features = ["with-axum"]}
-askama_axum = {version = "0.2"}
+askama = { version = "0.12", features = ["with-axum"] }
+askama_axum = "0.3"
 axum = "0.6"
 chrono = "0.4"
-reqwest = {version = "0.11", features = ["json"]}
-serde = {version = "1", features = ["derive"]}
+dotenvy = "0.15"
+reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-serde_with = "2"
-tokio = {version = "1", features = ["full"]}
+tokio = { version = "1", features = ["full"] }
