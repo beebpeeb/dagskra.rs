@@ -1,13 +1,11 @@
 use askama::Template;
 use axum::{routing, Router, Server};
-use dotenvy::dotenv;
 use std::net::SocketAddr;
 
 use dagskra::{fetch_listings, Listings};
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
     let app = Router::new()
         .route("/", routing::get(index))
         .route("/_listings", routing::get(listings));
