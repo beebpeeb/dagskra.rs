@@ -1,19 +1,15 @@
 use askama::Template;
-use axum::{routing, Router, Server};
-use std::net::SocketAddr;
+use axum::{routing, Router};
+use shuttle_axum::ShuttleAxum;
 
 use dagskra::{fetch_listings, Listings};
 
-#[tokio::main]
-async fn main() {
-    let app = Router::new()
+#[shuttle_runtime::main]
+async fn axum() -> ShuttleAxum {
+    let router = Router::new()
         .route("/", routing::get(index))
         .route("/_listings", routing::get(listings));
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
-    Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    Ok(router.into())
 }
 
 #[derive(Template)]
