@@ -1,11 +1,13 @@
 use askama::Template;
 use axum::{routing, Router};
 use shuttle_axum::ShuttleAxum;
+use tracing::info;
 
 use dagskra::{fetch_listings, Listings};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
+    info!("Running web application");
     let router = Router::new()
         .route("/", routing::get(index))
         .route("/_listings", routing::get(listings));
@@ -31,6 +33,7 @@ struct ListingsTemplate {
 }
 
 async fn listings() -> ListingsTemplate {
+    info!("Fetching schedule data");
     let listings = fetch_listings().await.unwrap_or_default();
     let date = listings.first().map_or("".to_string(), |l| l.date());
     ListingsTemplate { date, listings }
