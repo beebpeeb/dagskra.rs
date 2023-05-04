@@ -7,7 +7,7 @@ use dagskra::{fetch_listings, Listings};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
-    info!("Running web application");
+    info!("running web application");
     let router = Router::new()
         .route("/", routing::get(index))
         .route("/_listings", routing::get(listings));
@@ -33,7 +33,7 @@ struct ListingsTemplate {
 }
 
 async fn listings() -> ListingsTemplate {
-    info!("Fetching schedule data");
+    info!("fetching schedule data");
     let listings = fetch_listings().await.unwrap_or_default();
     let date = listings.first().map_or("".to_string(), |l| l.date());
     ListingsTemplate { date, listings }
