@@ -1862,9 +1862,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-axum"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb63e4cc0459cb676cb401f031cd3de337f3467d3fa64f0a34f7430f80ea2eaa"
+checksum = "8077bfba97461ba2626a18f542dad019c462050dedb49c5aeee14d07d9f19dce"
 dependencies = [
  "axum",
  "shuttle-runtime",
@@ -1872,9 +1872,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-codegen"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40dfdf603ff9f81a595e15f8250af8638175213de77e1be6cf145daff5c58103"
+checksum = "207a2e8b132eba5beaeb809c1bb4f52d1286e91def671aa676afade1b390226c"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -1884,10 +1884,11 @@ dependencies = [
 
 [[package]]
 name = "shuttle-common"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5069c36fbc9cbf86b0a620080d6ca4e8d57b3cbae107e93aae43162c4e310792"
+checksum = "e3cd718e869b335194aa6c4cbbc7bf230ad57b6fc9d5907f4fe8f48c82e86002"
 dependencies = [
+ "anyhow",
  "async-trait",
  "axum",
  "bytes",
@@ -1921,9 +1922,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-proto"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a56a380a4160cf999fdc72d4f3c93623f770607bf1ac9e7c7793def7bff0d0f"
+checksum = "1fdb0b1e4029c73b2be07e2c885cab67cec48e44bce298bdbd76201bc1211b7a"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1939,9 +1940,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-runtime"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f64cea553c3afd09409d495a416d8fae2d6799c12545c16b80289869b9f825b3"
+checksum = "be538eec058fa1816086358e3315716876c9c45e85e09e566b365154133ea4ff"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1965,9 +1966,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-service"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "759851cd18ef74c1243dc3c1e9acac833b197275566eca78d6d773774614a053"
+checksum = "05c10309ce94dac2bba01a13e8c72e543fef8374e49cc30bd644e71d864b0764"
 dependencies = [
  "anyhow",
  "async-trait",
