@@ -7,7 +7,7 @@ use dagskra::{fetch_listings, Listings};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
-    info!("running web application");
+    info!("starting");
     let router = Router::new()
         .route("/", routing::get(index))
         .route("/_listings", routing::get(listings));
