@@ -34,7 +34,7 @@ struct ListingsTemplate {
 
 async fn listings() -> ListingsTemplate {
     info!("fetching schedule data");
-    let listings = fetch_listings().await.unwrap_or_default();
-    let date = listings.first().map_or("".to_string(), |l| l.date());
+    let listings: Listings = fetch_listings().await.unwrap_or_default();
+    let date: String = listings.first().map_or("".to_string(), |l| l.date());
     ListingsTemplate { date, listings }
 }
