@@ -19,11 +19,11 @@ impl Listing {
         self.start_time.format("%d.%m.%Y").to_string()
     }
 
-    pub fn description(&self) -> &str {
+    pub fn details(&self) -> &str {
         self.description.trim().trim_end_matches(SUFFIX)
     }
 
-    pub fn has_description(&self) -> bool {
+    pub fn has_details(&self) -> bool {
         !self.description.trim().is_empty()
     }
 

@@ -1,20 +1,13 @@
-use askama::Template;
-use axum::{routing, Router};
-use shuttle_axum::ShuttleAxum;
-use tracing::info;
-
-use dagskra::{fetch_listings, Listings};
-
 #[shuttle_runtime::main]
-async fn axum() -> ShuttleAxum {
-    info!("Starting");
-    let router = Router::new()
-        .route("/", routing::get(index))
-        .route("/_listings", routing::get(listings));
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    tracing::info!("Starting app");
+    let router = axum::Router::new()
+        .route("/", axum::routing::get(index))
+        .route("/_listings", axum::routing::get(listings));
     Ok(router.into())
 }
 
-#[derive(Template)]
+#[derive(askama::Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
     title: &'static str,
@@ -25,16 +18,18 @@ async fn index() -> IndexTemplate {
     IndexTemplate { title }
 }
 
-#[derive(Template)]
+#[derive(askama::Template)]
 #[template(path = "_listings.html")]
 struct ListingsTemplate {
     date: String,
-    listings: Listings,
+    listings: dagskra::Listings,
 }
 
 async fn listings() -> ListingsTemplate {
-    info!("Fetching schedule data");
-    let listings: Listings = fetch_listings().await.unwrap_or_default();
-    let date: String = listings.first().map_or("".to_string(), |l| l.date());
+    tracing::info!("Fetching schedule data");
+    let listings = dagskra::fetch_listings().await.unwrap_or_default();
+    let date = listings
+        .first()
+        .map_or_else(|| "".to_string(), |listing| listing.date());
     ListingsTemplate { date, listings }
 }
