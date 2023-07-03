@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use serde::{de::Error, Deserialize, Deserializer};
+use std::error::Error as StdError;
 
 const SUFFIX: &str = " e.";
 
@@ -49,7 +50,7 @@ struct Response {
     results: Listings,
 }
 
-pub async fn fetch_listings() -> Result<Listings, Box<dyn std::error::Error>> {
+pub async fn fetch_listings() -> Result<Listings, Box<dyn StdError>> {
     let url = "https://apis.is/tv/ruv";
     let res: Response = reqwest::get(url).await?.json().await?;
     Ok(res.results)
