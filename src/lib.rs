@@ -4,8 +4,6 @@ use std::error::Error as StdError;
 
 const SUFFIX: &str = " e.";
 
-pub type Listings = Vec<Listing>;
-
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Listing {
     description: String,
@@ -47,10 +45,10 @@ impl Listing {
 
 #[derive(Deserialize)]
 struct Response {
-    results: Listings,
+    results: Vec<Listing>,
 }
 
-pub async fn fetch_listings() -> Result<Listings, Box<dyn StdError>> {
+pub async fn fetch_listings() -> Result<Vec<Listing>, Box<dyn StdError>> {
     let url = "https://apis.is/tv/ruv";
     let res: Response = reqwest::get(url).await?.json().await?;
     Ok(res.results)
