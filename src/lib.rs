@@ -1,4 +1,5 @@
 use chrono::NaiveDateTime;
+use reqwest::get;
 use serde::{de::Error, Deserialize, Deserializer};
 use std::error::Error as StdError;
 
@@ -50,7 +51,7 @@ struct Response {
 
 pub async fn fetch_listings() -> Result<Vec<Listing>, Box<dyn StdError>> {
     let url = "https://apis.is/tv/ruv";
-    let res: Response = reqwest::get(url).await?.json().await?;
+    let res: Response = get(url).await?.json().await?;
     Ok(res.results)
 }
 
