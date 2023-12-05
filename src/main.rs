@@ -1,5 +1,5 @@
 use askama::Template;
-use axum::{routing::get, Router};
+use axum::{routing, Router};
 use shuttle_axum::ShuttleAxum;
 use tracing::info;
 
@@ -9,8 +9,8 @@ use dagskra::{fetch_listings, Listing};
 async fn axum_app() -> ShuttleAxum {
     info!("Starting app");
     let router = Router::new()
-        .route("/", get(index))
-        .route("/_listings", get(listings));
+        .route("/", routing::get(index))
+        .route("/_listings", routing::get(listings));
     Ok(router.into())
 }
 
