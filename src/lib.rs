@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 use reqwest::get;
-use serde::{de::Error, Deserialize, Deserializer};
-use std::error::Error as StdError;
+use serde::Deserialize;
+use std::error::Error;
 
 const SUFFIX: &str = " e.";
 
@@ -9,7 +9,7 @@ const SUFFIX: &str = " e.";
 pub struct Listing {
     description: String,
     live: bool,
-    #[serde(deserialize_with = "deserialize_datetime", rename = "startTime")]
+    #[serde(rename = "startTime")]
     start_time: NaiveDateTime,
     title: String,
 }
@@ -49,18 +49,8 @@ struct Response {
     results: Vec<Listing>,
 }
 
-pub async fn fetch_listings() -> Result<Vec<Listing>, Box<dyn StdError>> {
+pub async fn fetch_listings() -> Result<Vec<Listing>, Box<dyn Error>> {
     let url = "https://apis.is/tv/ruv";
     let res: Response = get(url).await?.json().await?;
     Ok(res.results)
-}
-
-fn deserialize_datetime<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let fmt = "%Y-%m-%d %H:%M:%S";
-    let s: String = Deserialize::deserialize(deserializer)?;
-    let dt = NaiveDateTime::parse_from_str(&s, fmt).map_err(Error::custom)?;
-    Ok(dt)
 }

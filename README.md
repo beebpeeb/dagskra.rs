@@ -1,7 +1,7 @@
 ## Install
 
 ```sh
-cargo install cargo-shuttle
+cargo (b)install cargo-shuttle
 ```
 
 ## Build and run locally

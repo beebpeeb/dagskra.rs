@@ -1,17 +1,18 @@
 use askama::Template;
-use axum::{routing::get, serve, Router};
+use axum::{routing::get, Router};
 use chrono::Utc;
-use tokio::net::TcpListener;
+use shuttle_axum::ShuttleAxum;
+use tracing::info;
 
 use dagskra::{fetch_listings, Listing};
 
-#[tokio::main]
-async fn main() {
-    let app = Router::new()
+#[shuttle_runtime::main]
+async fn axum() -> ShuttleAxum {
+    info!("Starting axum app...");
+    let router = Router::new()
         .route("/", get(index))
         .route("/_listings", get(listings));
-    let listener = TcpListener::bind("0.0.0.0:8000").await.unwrap();
-    serve(listener, app).await.unwrap();
+    Ok(router.into())
 }
 
 #[derive(Template)]
@@ -22,8 +23,8 @@ struct IndexTemplate {
 }
 
 async fn index() -> IndexTemplate {
-    let title = "Dagskrá RÚV";
     let date = Utc::now().format("%d.%m.%Y").to_string();
+    let title = "Dagskrá RÚV";
     IndexTemplate { date, title }
 }
 
