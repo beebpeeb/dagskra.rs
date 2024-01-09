@@ -1,12 +1,14 @@
 use chrono::NaiveDateTime;
 use serde::{self, Deserialize, Deserializer};
 
+const FORMAT: &str = "%Y-%m-%d %H:%M:%S";
+
+// TODO: add Iceland timezone to deserialize a full UTC DateTime
 pub fn deserialize<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
 where
     D: Deserializer<'de>,
 {
-    let fmt = "%Y-%m-%d %H:%M:%S";
     let s = String::deserialize(deserializer)?;
-    let dt = NaiveDateTime::parse_from_str(&s, fmt).map_err(serde::de::Error::custom)?;
+    let dt = NaiveDateTime::parse_from_str(&s, FORMAT).map_err(serde::de::Error::custom)?;
     Ok(dt)
 }
