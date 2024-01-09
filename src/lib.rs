@@ -3,13 +3,15 @@ use reqwest::get;
 use serde::Deserialize;
 use std::error::Error;
 
+mod date_format;
+
 const SUFFIX: &str = " e.";
 
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Listing {
     description: String,
     live: bool,
-    #[serde(rename = "startTime")]
+    #[serde(rename = "startTime", with = "date_format")]
     start_time: NaiveDateTime,
     title: String,
 }
