@@ -3,7 +3,6 @@ use serde::{self, Deserialize, Deserializer};
 
 const FORMAT: &str = "%Y-%m-%d %H:%M:%S";
 
-// TODO: add Iceland timezone to deserialize a full UTC DateTime
 pub fn deserialize<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
 where
     D: Deserializer<'de>,
