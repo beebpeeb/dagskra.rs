@@ -1,5 +1,6 @@
 use askama::Template;
-use axum::{routing::get, Router};
+use axum::{routing, Router};
+use axum_htmx::HxRequestGuardLayer;
 use chrono::Utc;
 use shuttle_axum::ShuttleAxum;
 use tracing::info;
@@ -8,10 +9,13 @@ use dagskra::{fetch_listings, Listing};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
-    info!("Starting up axum app...");
+    info!("Starting axum app...");
+    let htmx_router = Router::new()
+        .route("/_listings", routing::get(listings))
+        .layer(HxRequestGuardLayer::default());
     let router = Router::new()
-        .route("/", get(index))
-        .route("/_listings", get(listings));
+        .merge(htmx_router)
+        .route("/", routing::get(index));
     Ok(router.into())
 }
 
