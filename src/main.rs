@@ -11,7 +11,7 @@ use dagskra::{fetch_listings, Listing};
 async fn axum() -> ShuttleAxum {
     info!("Starting axum app...");
     let htmx_router = Router::new()
-        .route("/_listings", routing::get(listings))
+        .route("/htmx/listings", routing::get(listings))
         .layer(HxRequestGuardLayer::default());
     let router = Router::new()
         .merge(htmx_router)
@@ -33,12 +33,13 @@ async fn index() -> IndexTemplate {
 }
 
 #[derive(Template)]
-#[template(path = "_listings.html")]
+#[template(path = "htmx/listings.html")]
 struct ListingsTemplate {
     listings: Vec<Listing>,
 }
 
 async fn listings() -> ListingsTemplate {
+    info!("Fetching schedule data...");
     let listings = fetch_listings().await.unwrap_or_default();
     ListingsTemplate { listings }
 }
