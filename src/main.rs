@@ -9,7 +9,7 @@ use dagskra::{fetch_listings, Listing};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
-    info!("Starting axum app...");
+    info!("Hleður...");
     let htmx_router = Router::new()
         .route("/htmx/listings", get(listings))
         .layer(HxRequestGuardLayer::default());

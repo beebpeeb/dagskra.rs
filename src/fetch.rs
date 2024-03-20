@@ -2,7 +2,7 @@ use reqwest::get;
 use serde::Deserialize;
 use std::error::Error;
 
-use crate::listing::Listing;
+use crate::Listing;
 
 #[derive(Deserialize)]
 struct Response {
