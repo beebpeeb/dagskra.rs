@@ -9,7 +9,7 @@ use dagskra::{fetch_listings, Listing};
 
 #[shuttle_runtime::main]
 async fn axum() -> ShuttleAxum {
-    info!("Hleður...");
+    info!("Hleð...");
     let htmx_router = Router::new()
         .route("/htmx/listings", get(listings))
         .layer(HxRequestGuardLayer::default());
@@ -38,7 +38,6 @@ struct ListingsTemplate {
 }
 
 async fn listings() -> ListingsTemplate {
-    info!("Fetching schedule data...");
     let listings = fetch_listings().await.unwrap_or_default();
     ListingsTemplate { listings }
 }
